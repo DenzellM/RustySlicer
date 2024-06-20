@@ -1,0 +1,3883 @@
+State 46 conflicts: 21 shift/reduce
+State 71 conflicts: 3 shift/reduce
+State 72 conflicts: 1 shift/reduce
+State 80 conflicts: 1 shift/reduce
+State 112 conflicts: 3 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: items
+
+    2 items: %empty
+    3      | item items
+
+    4 item: func
+
+    5 derefExp_B: STAR expr
+
+    6 borrowExp_B: AMPERSAND optMut expr
+    7            | ANDAND optMut expr
+
+    8 negExp_B: MINUS expr
+    9         | NOT expr
+
+   10 arithExp_B: expr PLUS expr
+   11           | expr MINUS expr
+   12           | expr STAR expr
+   13           | expr SLASH expr
+
+   14 boolOpExp_B: expr ANDAND expr
+   15            | expr OROR expr
+
+   16 compOp_B: expr EQEQ expr
+   17         | expr NE expr
+   18         | expr GT expr
+   19         | expr LT expr
+   20         | expr GE expr
+   21         | expr LE expr
+
+   22 assExp_B: expr EQ expr
+
+   23 compAssExp_B: expr PLUSEQ expr
+   24             | expr MINUSEQ expr
+   25             | expr STAR EQ expr
+   26             | expr SLASH EQ expr
+
+   27 groupExp: LPAREN expr RPAREN
+
+   28 callParams: %empty
+   29           | expr COM callParams
+   30           | expr
+
+   31 callExp: exprWOBlock LPAREN callParams RPAREN
+
+   32 breakExp: BREAK
+
+   33 idExp: IDENTIFIER
+
+   34 returnExp: RETURN expr
+   35          | RETURN
+
+   36 optMut: %empty
+   37       | MUT
+
+   38 opExp_B: negExp_B
+   39        | derefExp_B
+   40        | arithExp_B
+   41        | boolOpExp_B
+   42        | compOp_B
+   43        | compAssExp_B
+   44        | assExp_B
+   45        | borrowExp_B
+
+   46 contExp: CONTINUE
+
+   47 expr: exprWBlock
+   48     | exprWOBlock
+   49     | stmnt
+
+   50 exprWOBlock: idExp
+   51            | opExp_B
+   52            | litExp
+   53            | groupExp
+   54            | callExp
+
+   55 loopExpnt: contExp
+   56          | returnExp
+   57          | breakExp
+
+   58 letExpn: LET optMut identifier opTypeDecl opValueDecl SEMICOLON
+
+   59 opTypeDecl: %empty
+   60           | COLON TYPE
+
+   61 opValueDecl: %empty
+   62            | EQ expr
+
+   63 returnType: %empty
+   64           | ARROW TYPE
+
+   65 patNTA: idExp
+   66       | litExp
+
+   67 typePath: TYPE
+
+   68 refType: AMPERSAND optMut typeNB
+
+   69 typeNB: typePath
+   70       | refType
+
+   71 funcParam: patNTA COLON typeNB
+
+   72 funcParams: %empty
+   73           | funcParam COM funcParams
+   74           | funcParam
+
+   75 funcBody: blockExpr
+   76         | SEMICOLON
+
+   77 identifier: IDENTIFIER
+
+   78 func: FN identifier LPAREN funcParams RPAREN returnType funcBody
+
+   79 macro: PRINTVAR
+   80      | PRINTSTRING
+
+   81 blockExpr: LBRACE expr RBRACE
+   82          | LBRACE stmnt RBRACE
+   83          | LBRACE stmnts expr RBRACE
+   84          | LBRACE RBRACE
+
+   85 stmnts: expr
+   86       | stmnts expr
+
+   87 exprWBlock: loopExpr
+   88           | ifExpr
+   89           | blockExpr
+
+   90 ifExpr: IF expr blockExpr
+   91       | IF expr blockExpr ELSE blockOrIf
+
+   92 blockOrIf: blockExpr
+   93          | ifExpr
+
+   94 stmnt: SEMICOLON
+   95      | letExpn
+   96      | item
+   97      | macro
+   98      | loopExpnt
+
+   99 loopExpr: WHILE exprWOBlock blockExpr
+
+  100 litExp: TRUE
+  101       | FALSE
+  102       | DEC_LITERAL
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    PRINTVAR (258) 79
+    PRINTSTRING (259) 80
+    LET (260) 58
+    IF (261) 90 91
+    ELSE (262) 91
+    WHILE (263) 99
+    MUT (264) 37
+    COM (265) 29 73
+    TYPE (266) 60 64 67
+    FALSE (267) 101
+    TRUE (268) 100
+    FN (269) 78
+    CONTINUE (270) 46
+    BREAK (271) 32
+    RETURN (272) 34 35
+    GT (273) 18
+    LT (274) 19
+    EQ (275) 22 25 26 62
+    EQEQ (276) 16
+    NE (277) 17
+    OROR (278) 15
+    ANDAND (279) 7 14
+    LE (280) 21
+    GE (281) 20
+    PLUSEQ (282) 23
+    MINUSEQ (283) 24
+    ARROW (284) 64
+    IDENTIFIER (285) 33 77
+    DEC_LITERAL (286) 102
+    COLON (287) 60 71
+    AMPERSAND (288) 6 68
+    PLUS (289) 10
+    MINUS (290) 8 11
+    STAR (291) 5 12 25
+    SLASH (292) 13 26
+    NOT (293) 9
+    SEMICOLON (294) 58 76 94
+    LBRACE (295) 81 82 83 84
+    RBRACE (296) 81 82 83 84
+    LPAREN (297) 27 31 78
+    RPAREN (298) 27 31 78
+    UNARY (299)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (45)
+        on left: 0
+    program (46)
+        on left: 1
+        on right: 0
+    items <prog> (47)
+        on left: 2 3
+        on right: 1 3
+    item <exp> (48)
+        on left: 4
+        on right: 3 96
+    derefExp_B <exp> (49)
+        on left: 5
+        on right: 39
+    borrowExp_B <exp> (50)
+        on left: 6 7
+        on right: 45
+    negExp_B <exp> (51)
+        on left: 8 9
+        on right: 38
+    arithExp_B <exp> (52)
+        on left: 10 11 12 13
+        on right: 40
+    boolOpExp_B <exp> (53)
+        on left: 14 15
+        on right: 41
+    compOp_B <exp> (54)
+        on left: 16 17 18 19 20 21
+        on right: 42
+    assExp_B <exp> (55)
+        on left: 22
+        on right: 44
+    compAssExp_B <exp> (56)
+        on left: 23 24 25 26
+        on right: 43
+    groupExp <exp> (57)
+        on left: 27
+        on right: 53
+    callParams <callParamList> (58)
+        on left: 28 29 30
+        on right: 29 31
+    callExp <exp> (59)
+        on left: 31
+        on right: 54
+    breakExp <exp> (60)
+        on left: 32
+        on right: 57
+    idExp <exp> (61)
+        on left: 33
+        on right: 50 65
+    returnExp <exp> (62)
+        on left: 34 35
+        on right: 56
+    optMut <boolean> (63)
+        on left: 36 37
+        on right: 6 7 58 68
+    opExp_B <exp> (64)
+        on left: 38 39 40 41 42 43 44 45
+        on right: 51
+    contExp <exp> (65)
+        on left: 46
+        on right: 55
+    expr <exp> (66)
+        on left: 47 48 49
+        on right: 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 29 30 34 62 81 83 85 86 90 91
+    exprWOBlock <exp> (67)
+        on left: 50 51 52 53 54
+        on right: 31 48 99
+    loopExpnt <exp> (68)
+        on left: 55 56 57
+        on right: 98
+    letExpn <exp> (69)
+        on left: 58
+        on right: 95
+    opTypeDecl <id> (70)
+        on left: 59 60
+        on right: 58
+    opValueDecl <exp> (71)
+        on left: 61 62
+        on right: 58
+    returnType <id> (72)
+        on left: 63 64
+        on right: 78
+    patNTA <exp> (73)
+        on left: 65 66
+        on right: 71
+    typePath <id> (74)
+        on left: 67
+        on right: 69
+    refType <id> (75)
+        on left: 68
+        on right: 70
+    typeNB <id> (76)
+        on left: 69 70
+        on right: 68 71
+    funcParam <param> (77)
+        on left: 71
+        on right: 73 74
+    funcParams <paramList> (78)
+        on left: 72 73 74
+        on right: 73 78
+    funcBody <exp> (79)
+        on left: 75 76
+        on right: 78
+    identifier <id> (80)
+        on left: 77
+        on right: 58 78
+    func <exp> (81)
+        on left: 78
+        on right: 4
+    macro <exp> (82)
+        on left: 79 80
+        on right: 97
+    blockExpr <exp> (83)
+        on left: 81 82 83 84
+        on right: 75 89 90 91 92 99
+    stmnts <exp> (84)
+        on left: 85 86
+        on right: 83 86
+    exprWBlock <exp> (85)
+        on left: 87 88 89
+        on right: 47
+    ifExpr <exp> (86)
+        on left: 90 91
+        on right: 88 93
+    blockOrIf <exp> (87)
+        on left: 92 93
+        on right: 91
+    stmnt <exp> (88)
+        on left: 94 95 96 97 98
+        on right: 49 82
+    loopExpr <exp> (89)
+        on left: 99
+        on right: 87
+    litExp <exp> (90)
+        on left: 100 101 102
+        on right: 52 66
+
+
+State 0
+
+    0 $accept: . program $end
+
+    FN  shift, and go to state 1
+
+    $default  reduce using rule 2 (items)
+
+    program  go to state 2
+    items    go to state 3
+    item     go to state 4
+    func     go to state 5
+
+
+State 1
+
+   78 func: FN . identifier LPAREN funcParams RPAREN returnType funcBody
+
+    IDENTIFIER  shift, and go to state 6
+
+    identifier  go to state 7
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 8
+
+
+State 3
+
+    1 program: items .
+
+    $default  reduce using rule 1 (program)
+
+
+State 4
+
+    3 items: item . items
+
+    FN  shift, and go to state 1
+
+    $default  reduce using rule 2 (items)
+
+    items  go to state 9
+    item   go to state 4
+    func   go to state 5
+
+
+State 5
+
+    4 item: func .
+
+    $default  reduce using rule 4 (item)
+
+
+State 6
+
+   77 identifier: IDENTIFIER .
+
+    $default  reduce using rule 77 (identifier)
+
+
+State 7
+
+   78 func: FN identifier . LPAREN funcParams RPAREN returnType funcBody
+
+    LPAREN  shift, and go to state 10
+
+
+State 8
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 9
+
+    3 items: item items .
+
+    $default  reduce using rule 3 (items)
+
+
+State 10
+
+   78 func: FN identifier LPAREN . funcParams RPAREN returnType funcBody
+
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+
+    $default  reduce using rule 72 (funcParams)
+
+    idExp       go to state 15
+    patNTA      go to state 16
+    funcParam   go to state 17
+    funcParams  go to state 18
+    litExp      go to state 19
+
+
+State 11
+
+  101 litExp: FALSE .
+
+    $default  reduce using rule 101 (litExp)
+
+
+State 12
+
+  100 litExp: TRUE .
+
+    $default  reduce using rule 100 (litExp)
+
+
+State 13
+
+   33 idExp: IDENTIFIER .
+
+    $default  reduce using rule 33 (idExp)
+
+
+State 14
+
+  102 litExp: DEC_LITERAL .
+
+    $default  reduce using rule 102 (litExp)
+
+
+State 15
+
+   65 patNTA: idExp .
+
+    $default  reduce using rule 65 (patNTA)
+
+
+State 16
+
+   71 funcParam: patNTA . COLON typeNB
+
+    COLON  shift, and go to state 20
+
+
+State 17
+
+   73 funcParams: funcParam . COM funcParams
+   74           | funcParam .
+
+    COM  shift, and go to state 21
+
+    $default  reduce using rule 74 (funcParams)
+
+
+State 18
+
+   78 func: FN identifier LPAREN funcParams . RPAREN returnType funcBody
+
+    RPAREN  shift, and go to state 22
+
+
+State 19
+
+   66 patNTA: litExp .
+
+    $default  reduce using rule 66 (patNTA)
+
+
+State 20
+
+   71 funcParam: patNTA COLON . typeNB
+
+    TYPE       shift, and go to state 23
+    AMPERSAND  shift, and go to state 24
+
+    typePath  go to state 25
+    refType   go to state 26
+    typeNB    go to state 27
+
+
+State 21
+
+   73 funcParams: funcParam COM . funcParams
+
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+
+    $default  reduce using rule 72 (funcParams)
+
+    idExp       go to state 15
+    patNTA      go to state 16
+    funcParam   go to state 17
+    funcParams  go to state 28
+    litExp      go to state 19
+
+
+State 22
+
+   78 func: FN identifier LPAREN funcParams RPAREN . returnType funcBody
+
+    ARROW  shift, and go to state 29
+
+    $default  reduce using rule 63 (returnType)
+
+    returnType  go to state 30
+
+
+State 23
+
+   67 typePath: TYPE .
+
+    $default  reduce using rule 67 (typePath)
+
+
+State 24
+
+   68 refType: AMPERSAND . optMut typeNB
+
+    MUT  shift, and go to state 31
+
+    $default  reduce using rule 36 (optMut)
+
+    optMut  go to state 32
+
+
+State 25
+
+   69 typeNB: typePath .
+
+    $default  reduce using rule 69 (typeNB)
+
+
+State 26
+
+   70 typeNB: refType .
+
+    $default  reduce using rule 70 (typeNB)
+
+
+State 27
+
+   71 funcParam: patNTA COLON typeNB .
+
+    $default  reduce using rule 71 (funcParam)
+
+
+State 28
+
+   73 funcParams: funcParam COM funcParams .
+
+    $default  reduce using rule 73 (funcParams)
+
+
+State 29
+
+   64 returnType: ARROW . TYPE
+
+    TYPE  shift, and go to state 33
+
+
+State 30
+
+   78 func: FN identifier LPAREN funcParams RPAREN returnType . funcBody
+
+    SEMICOLON  shift, and go to state 34
+    LBRACE     shift, and go to state 35
+
+    funcBody   go to state 36
+    blockExpr  go to state 37
+
+
+State 31
+
+   37 optMut: MUT .
+
+    $default  reduce using rule 37 (optMut)
+
+
+State 32
+
+   68 refType: AMPERSAND optMut . typeNB
+
+    TYPE       shift, and go to state 23
+    AMPERSAND  shift, and go to state 24
+
+    typePath  go to state 25
+    refType   go to state 26
+    typeNB    go to state 38
+
+
+State 33
+
+   64 returnType: ARROW TYPE .
+
+    $default  reduce using rule 64 (returnType)
+
+
+State 34
+
+   76 funcBody: SEMICOLON .
+
+    $default  reduce using rule 76 (funcBody)
+
+
+State 35
+
+   81 blockExpr: LBRACE . expr RBRACE
+   82          | LBRACE . stmnt RBRACE
+   83          | LBRACE . stmnts expr RBRACE
+   84          | LBRACE . RBRACE
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    RBRACE       shift, and go to state 53
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 71
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    stmnts        go to state 77
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 80
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 36
+
+   78 func: FN identifier LPAREN funcParams RPAREN returnType funcBody .
+
+    $default  reduce using rule 78 (func)
+
+
+State 37
+
+   75 funcBody: blockExpr .
+
+    $default  reduce using rule 75 (funcBody)
+
+
+State 38
+
+   68 refType: AMPERSAND optMut typeNB .
+
+    $default  reduce using rule 68 (refType)
+
+
+State 39
+
+   79 macro: PRINTVAR .
+
+    $default  reduce using rule 79 (macro)
+
+
+State 40
+
+   80 macro: PRINTSTRING .
+
+    $default  reduce using rule 80 (macro)
+
+
+State 41
+
+   58 letExpn: LET . optMut identifier opTypeDecl opValueDecl SEMICOLON
+
+    MUT  shift, and go to state 31
+
+    $default  reduce using rule 36 (optMut)
+
+    optMut  go to state 83
+
+
+State 42
+
+   90 ifExpr: IF . expr blockExpr
+   91       | IF . expr blockExpr ELSE blockOrIf
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 84
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 43
+
+   99 loopExpr: WHILE . exprWOBlock blockExpr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 86
+    exprWOBlock   go to state 87
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 44
+
+   46 contExp: CONTINUE .
+
+    $default  reduce using rule 46 (contExp)
+
+
+State 45
+
+   32 breakExp: BREAK .
+
+    $default  reduce using rule 32 (breakExp)
+
+
+State 46
+
+   34 returnExp: RETURN . expr
+   35          | RETURN .
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    PRINTVAR     [reduce using rule 35 (returnExp)]
+    PRINTSTRING  [reduce using rule 35 (returnExp)]
+    LET          [reduce using rule 35 (returnExp)]
+    IF           [reduce using rule 35 (returnExp)]
+    WHILE        [reduce using rule 35 (returnExp)]
+    FALSE        [reduce using rule 35 (returnExp)]
+    TRUE         [reduce using rule 35 (returnExp)]
+    FN           [reduce using rule 35 (returnExp)]
+    CONTINUE     [reduce using rule 35 (returnExp)]
+    BREAK        [reduce using rule 35 (returnExp)]
+    RETURN       [reduce using rule 35 (returnExp)]
+    ANDAND       [reduce using rule 35 (returnExp)]
+    IDENTIFIER   [reduce using rule 35 (returnExp)]
+    DEC_LITERAL  [reduce using rule 35 (returnExp)]
+    AMPERSAND    [reduce using rule 35 (returnExp)]
+    MINUS        [reduce using rule 35 (returnExp)]
+    STAR         [reduce using rule 35 (returnExp)]
+    NOT          [reduce using rule 35 (returnExp)]
+    SEMICOLON    [reduce using rule 35 (returnExp)]
+    LBRACE       [reduce using rule 35 (returnExp)]
+    LPAREN       [reduce using rule 35 (returnExp)]
+    $default     reduce using rule 35 (returnExp)
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 88
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 47
+
+    7 borrowExp_B: ANDAND . optMut expr
+
+    MUT  shift, and go to state 31
+
+    $default  reduce using rule 36 (optMut)
+
+    optMut  go to state 89
+
+
+State 48
+
+    6 borrowExp_B: AMPERSAND . optMut expr
+
+    MUT  shift, and go to state 31
+
+    $default  reduce using rule 36 (optMut)
+
+    optMut  go to state 90
+
+
+State 49
+
+    8 negExp_B: MINUS . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 91
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 50
+
+    5 derefExp_B: STAR . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 92
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 51
+
+    9 negExp_B: NOT . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 93
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 52
+
+   94 stmnt: SEMICOLON .
+
+    $default  reduce using rule 94 (stmnt)
+
+
+State 53
+
+   84 blockExpr: LBRACE RBRACE .
+
+    $default  reduce using rule 84 (blockExpr)
+
+
+State 54
+
+   27 groupExp: LPAREN . expr RPAREN
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 94
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 55
+
+   96 stmnt: item .
+
+    $default  reduce using rule 96 (stmnt)
+
+
+State 56
+
+   39 opExp_B: derefExp_B .
+
+    $default  reduce using rule 39 (opExp_B)
+
+
+State 57
+
+   45 opExp_B: borrowExp_B .
+
+    $default  reduce using rule 45 (opExp_B)
+
+
+State 58
+
+   38 opExp_B: negExp_B .
+
+    $default  reduce using rule 38 (opExp_B)
+
+
+State 59
+
+   40 opExp_B: arithExp_B .
+
+    $default  reduce using rule 40 (opExp_B)
+
+
+State 60
+
+   41 opExp_B: boolOpExp_B .
+
+    $default  reduce using rule 41 (opExp_B)
+
+
+State 61
+
+   42 opExp_B: compOp_B .
+
+    $default  reduce using rule 42 (opExp_B)
+
+
+State 62
+
+   44 opExp_B: assExp_B .
+
+    $default  reduce using rule 44 (opExp_B)
+
+
+State 63
+
+   43 opExp_B: compAssExp_B .
+
+    $default  reduce using rule 43 (opExp_B)
+
+
+State 64
+
+   53 exprWOBlock: groupExp .
+
+    $default  reduce using rule 53 (exprWOBlock)
+
+
+State 65
+
+   54 exprWOBlock: callExp .
+
+    $default  reduce using rule 54 (exprWOBlock)
+
+
+State 66
+
+   57 loopExpnt: breakExp .
+
+    $default  reduce using rule 57 (loopExpnt)
+
+
+State 67
+
+   50 exprWOBlock: idExp .
+
+    $default  reduce using rule 50 (exprWOBlock)
+
+
+State 68
+
+   56 loopExpnt: returnExp .
+
+    $default  reduce using rule 56 (loopExpnt)
+
+
+State 69
+
+   51 exprWOBlock: opExp_B .
+
+    $default  reduce using rule 51 (exprWOBlock)
+
+
+State 70
+
+   55 loopExpnt: contExp .
+
+    $default  reduce using rule 55 (loopExpnt)
+
+
+State 71
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   81 blockExpr: LBRACE expr . RBRACE
+   85 stmnts: expr .
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+    RBRACE   shift, and go to state 110
+
+    ANDAND    [reduce using rule 85 (stmnts)]
+    MINUS     [reduce using rule 85 (stmnts)]
+    STAR      [reduce using rule 85 (stmnts)]
+    $default  reduce using rule 85 (stmnts)
+
+
+State 72
+
+   31 callExp: exprWOBlock . LPAREN callParams RPAREN
+   48 expr: exprWOBlock .
+
+    LPAREN  shift, and go to state 111
+
+    LPAREN    [reduce using rule 48 (expr)]
+    $default  reduce using rule 48 (expr)
+
+
+State 73
+
+   98 stmnt: loopExpnt .
+
+    $default  reduce using rule 98 (stmnt)
+
+
+State 74
+
+   95 stmnt: letExpn .
+
+    $default  reduce using rule 95 (stmnt)
+
+
+State 75
+
+   97 stmnt: macro .
+
+    $default  reduce using rule 97 (stmnt)
+
+
+State 76
+
+   89 exprWBlock: blockExpr .
+
+    $default  reduce using rule 89 (exprWBlock)
+
+
+State 77
+
+   83 blockExpr: LBRACE stmnts . expr RBRACE
+   86 stmnts: stmnts . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 112
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 78
+
+   47 expr: exprWBlock .
+
+    $default  reduce using rule 47 (expr)
+
+
+State 79
+
+   88 exprWBlock: ifExpr .
+
+    $default  reduce using rule 88 (exprWBlock)
+
+
+State 80
+
+   49 expr: stmnt .
+   82 blockExpr: LBRACE stmnt . RBRACE
+
+    RBRACE  shift, and go to state 113
+
+    RBRACE    [reduce using rule 49 (expr)]
+    $default  reduce using rule 49 (expr)
+
+
+State 81
+
+   87 exprWBlock: loopExpr .
+
+    $default  reduce using rule 87 (exprWBlock)
+
+
+State 82
+
+   52 exprWOBlock: litExp .
+
+    $default  reduce using rule 52 (exprWOBlock)
+
+
+State 83
+
+   58 letExpn: LET optMut . identifier opTypeDecl opValueDecl SEMICOLON
+
+    IDENTIFIER  shift, and go to state 6
+
+    identifier  go to state 114
+
+
+State 84
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   90 ifExpr: IF expr . blockExpr
+   91       | IF expr . blockExpr ELSE blockOrIf
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+    LBRACE   shift, and go to state 35
+
+    blockExpr  go to state 115
+
+
+State 85
+
+   49 expr: stmnt .
+
+    $default  reduce using rule 49 (expr)
+
+
+State 86
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+
+State 87
+
+   31 callExp: exprWOBlock . LPAREN callParams RPAREN
+   48 expr: exprWOBlock .
+   99 loopExpr: WHILE exprWOBlock . blockExpr
+
+    LBRACE  shift, and go to state 35
+    LPAREN  shift, and go to state 111
+
+    $default  reduce using rule 48 (expr)
+
+    blockExpr  go to state 116
+
+
+State 88
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   34 returnExp: RETURN expr .
+
+    $default  reduce using rule 34 (returnExp)
+
+
+State 89
+
+    7 borrowExp_B: ANDAND optMut . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 117
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 90
+
+    6 borrowExp_B: AMPERSAND optMut . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 118
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 91
+
+    8 negExp_B: MINUS expr .
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 8 (negExp_B)
+
+
+State 92
+
+    5 derefExp_B: STAR expr .
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 5 (derefExp_B)
+
+
+State 93
+
+    9 negExp_B: NOT expr .
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 9 (negExp_B)
+
+
+State 94
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   27 groupExp: LPAREN expr . RPAREN
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+    RPAREN   shift, and go to state 119
+
+
+State 95
+
+   18 compOp_B: expr GT . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 120
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 96
+
+   19 compOp_B: expr LT . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 121
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 97
+
+   22 assExp_B: expr EQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 122
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 98
+
+   16 compOp_B: expr EQEQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 123
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 99
+
+   17 compOp_B: expr NE . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 124
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 100
+
+   15 boolOpExp_B: expr OROR . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 125
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 101
+
+   14 boolOpExp_B: expr ANDAND . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 126
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 102
+
+   21 compOp_B: expr LE . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 127
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 103
+
+   20 compOp_B: expr GE . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 128
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 104
+
+   23 compAssExp_B: expr PLUSEQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 129
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 105
+
+   24 compAssExp_B: expr MINUSEQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 130
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 106
+
+   10 arithExp_B: expr PLUS . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 131
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 107
+
+   11 arithExp_B: expr MINUS . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 132
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 108
+
+   12 arithExp_B: expr STAR . expr
+   25 compAssExp_B: expr STAR . EQ expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    EQ           shift, and go to state 133
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 134
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 109
+
+   13 arithExp_B: expr SLASH . expr
+   26 compAssExp_B: expr SLASH . EQ expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    EQ           shift, and go to state 135
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 136
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 110
+
+   81 blockExpr: LBRACE expr RBRACE .
+
+    $default  reduce using rule 81 (blockExpr)
+
+
+State 111
+
+   31 callExp: exprWOBlock LPAREN . callParams RPAREN
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    $default  reduce using rule 28 (callParams)
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callParams    go to state 137
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 138
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 112
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   83 blockExpr: LBRACE stmnts expr . RBRACE
+   86 stmnts: stmnts expr .
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+    RBRACE   shift, and go to state 139
+
+    ANDAND    [reduce using rule 86 (stmnts)]
+    MINUS     [reduce using rule 86 (stmnts)]
+    STAR      [reduce using rule 86 (stmnts)]
+    $default  reduce using rule 86 (stmnts)
+
+
+State 113
+
+   82 blockExpr: LBRACE stmnt RBRACE .
+
+    $default  reduce using rule 82 (blockExpr)
+
+
+State 114
+
+   58 letExpn: LET optMut identifier . opTypeDecl opValueDecl SEMICOLON
+
+    COLON  shift, and go to state 140
+
+    $default  reduce using rule 59 (opTypeDecl)
+
+    opTypeDecl  go to state 141
+
+
+State 115
+
+   90 ifExpr: IF expr blockExpr .
+   91       | IF expr blockExpr . ELSE blockOrIf
+
+    ELSE  shift, and go to state 142
+
+    $default  reduce using rule 90 (ifExpr)
+
+
+State 116
+
+   99 loopExpr: WHILE exprWOBlock blockExpr .
+
+    $default  reduce using rule 99 (loopExpr)
+
+
+State 117
+
+    7 borrowExp_B: ANDAND optMut expr .
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 7 (borrowExp_B)
+
+
+State 118
+
+    6 borrowExp_B: AMPERSAND optMut expr .
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 6 (borrowExp_B)
+
+
+State 119
+
+   27 groupExp: LPAREN expr RPAREN .
+
+    $default  reduce using rule 27 (groupExp)
+
+
+State 120
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   18         | expr GT expr .
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 18 (compOp_B)
+
+
+State 121
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   19         | expr LT expr .
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 19 (compOp_B)
+
+
+State 122
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   22         | expr EQ expr .
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 22 (assExp_B)
+
+
+State 123
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   16         | expr EQEQ expr .
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT     shift, and go to state 95
+    LT     shift, and go to state 96
+    LE     shift, and go to state 102
+    GE     shift, and go to state 103
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 16 (compOp_B)
+
+
+State 124
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   17         | expr NE expr .
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT     shift, and go to state 95
+    LT     shift, and go to state 96
+    LE     shift, and go to state 102
+    GE     shift, and go to state 103
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 17 (compOp_B)
+
+
+State 125
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   15            | expr OROR expr .
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT     shift, and go to state 95
+    LT     shift, and go to state 96
+    EQEQ   shift, and go to state 98
+    NE     shift, and go to state 99
+    LE     shift, and go to state 102
+    GE     shift, and go to state 103
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 15 (boolOpExp_B)
+
+
+State 126
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   14            | expr ANDAND expr .
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT     shift, and go to state 95
+    LT     shift, and go to state 96
+    EQEQ   shift, and go to state 98
+    NE     shift, and go to state 99
+    LE     shift, and go to state 102
+    GE     shift, and go to state 103
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 14 (boolOpExp_B)
+
+
+State 127
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   21         | expr LE expr .
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 21 (compOp_B)
+
+
+State 128
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   20         | expr GE expr .
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    PLUS   shift, and go to state 106
+    MINUS  shift, and go to state 107
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 20 (compOp_B)
+
+
+State 129
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   23             | expr PLUSEQ expr .
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 23 (compAssExp_B)
+
+
+State 130
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   24             | expr MINUSEQ expr .
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 24 (compAssExp_B)
+
+
+State 131
+
+   10 arithExp_B: expr . PLUS expr
+   10           | expr PLUS expr .
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 10 (arithExp_B)
+
+
+State 132
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   11           | expr MINUS expr .
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    STAR   shift, and go to state 108
+    SLASH  shift, and go to state 109
+
+    $default  reduce using rule 11 (arithExp_B)
+
+
+State 133
+
+   25 compAssExp_B: expr STAR EQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 143
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 134
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   12           | expr STAR expr .
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 12 (arithExp_B)
+
+
+State 135
+
+   26 compAssExp_B: expr SLASH EQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 144
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 136
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   13           | expr SLASH expr .
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+
+    $default  reduce using rule 13 (arithExp_B)
+
+
+State 137
+
+   31 callExp: exprWOBlock LPAREN callParams . RPAREN
+
+    RPAREN  shift, and go to state 145
+
+
+State 138
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   29 callParams: expr . COM callParams
+   30           | expr .
+
+    COM      shift, and go to state 146
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 30 (callParams)
+
+
+State 139
+
+   83 blockExpr: LBRACE stmnts expr RBRACE .
+
+    $default  reduce using rule 83 (blockExpr)
+
+
+State 140
+
+   60 opTypeDecl: COLON . TYPE
+
+    TYPE  shift, and go to state 147
+
+
+State 141
+
+   58 letExpn: LET optMut identifier opTypeDecl . opValueDecl SEMICOLON
+
+    EQ  shift, and go to state 148
+
+    $default  reduce using rule 61 (opValueDecl)
+
+    opValueDecl  go to state 149
+
+
+State 142
+
+   91 ifExpr: IF expr blockExpr ELSE . blockOrIf
+
+    IF      shift, and go to state 42
+    LBRACE  shift, and go to state 35
+
+    blockExpr  go to state 150
+    ifExpr     go to state 151
+    blockOrIf  go to state 152
+
+
+State 143
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   25             | expr STAR EQ expr .
+   26             | expr . SLASH EQ expr
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 25 (compAssExp_B)
+
+
+State 144
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   26             | expr SLASH EQ expr .
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 26 (compAssExp_B)
+
+
+State 145
+
+   31 callExp: exprWOBlock LPAREN callParams RPAREN .
+
+    $default  reduce using rule 31 (callExp)
+
+
+State 146
+
+   29 callParams: expr COM . callParams
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    $default  reduce using rule 28 (callParams)
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callParams    go to state 153
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 138
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 147
+
+   60 opTypeDecl: COLON TYPE .
+
+    $default  reduce using rule 60 (opTypeDecl)
+
+
+State 148
+
+   62 opValueDecl: EQ . expr
+
+    PRINTVAR     shift, and go to state 39
+    PRINTSTRING  shift, and go to state 40
+    LET          shift, and go to state 41
+    IF           shift, and go to state 42
+    WHILE        shift, and go to state 43
+    FALSE        shift, and go to state 11
+    TRUE         shift, and go to state 12
+    FN           shift, and go to state 1
+    CONTINUE     shift, and go to state 44
+    BREAK        shift, and go to state 45
+    RETURN       shift, and go to state 46
+    ANDAND       shift, and go to state 47
+    IDENTIFIER   shift, and go to state 13
+    DEC_LITERAL  shift, and go to state 14
+    AMPERSAND    shift, and go to state 48
+    MINUS        shift, and go to state 49
+    STAR         shift, and go to state 50
+    NOT          shift, and go to state 51
+    SEMICOLON    shift, and go to state 52
+    LBRACE       shift, and go to state 35
+    LPAREN       shift, and go to state 54
+
+    item          go to state 55
+    derefExp_B    go to state 56
+    borrowExp_B   go to state 57
+    negExp_B      go to state 58
+    arithExp_B    go to state 59
+    boolOpExp_B   go to state 60
+    compOp_B      go to state 61
+    assExp_B      go to state 62
+    compAssExp_B  go to state 63
+    groupExp      go to state 64
+    callExp       go to state 65
+    breakExp      go to state 66
+    idExp         go to state 67
+    returnExp     go to state 68
+    opExp_B       go to state 69
+    contExp       go to state 70
+    expr          go to state 154
+    exprWOBlock   go to state 72
+    loopExpnt     go to state 73
+    letExpn       go to state 74
+    func          go to state 5
+    macro         go to state 75
+    blockExpr     go to state 76
+    exprWBlock    go to state 78
+    ifExpr        go to state 79
+    stmnt         go to state 85
+    loopExpr      go to state 81
+    litExp        go to state 82
+
+
+State 149
+
+   58 letExpn: LET optMut identifier opTypeDecl opValueDecl . SEMICOLON
+
+    SEMICOLON  shift, and go to state 155
+
+
+State 150
+
+   92 blockOrIf: blockExpr .
+
+    $default  reduce using rule 92 (blockOrIf)
+
+
+State 151
+
+   93 blockOrIf: ifExpr .
+
+    $default  reduce using rule 93 (blockOrIf)
+
+
+State 152
+
+   91 ifExpr: IF expr blockExpr ELSE blockOrIf .
+
+    $default  reduce using rule 91 (ifExpr)
+
+
+State 153
+
+   29 callParams: expr COM callParams .
+
+    $default  reduce using rule 29 (callParams)
+
+
+State 154
+
+   10 arithExp_B: expr . PLUS expr
+   11           | expr . MINUS expr
+   12           | expr . STAR expr
+   13           | expr . SLASH expr
+   14 boolOpExp_B: expr . ANDAND expr
+   15            | expr . OROR expr
+   16 compOp_B: expr . EQEQ expr
+   17         | expr . NE expr
+   18         | expr . GT expr
+   19         | expr . LT expr
+   20         | expr . GE expr
+   21         | expr . LE expr
+   22 assExp_B: expr . EQ expr
+   23 compAssExp_B: expr . PLUSEQ expr
+   24             | expr . MINUSEQ expr
+   25             | expr . STAR EQ expr
+   26             | expr . SLASH EQ expr
+   62 opValueDecl: EQ expr .
+
+    GT       shift, and go to state 95
+    LT       shift, and go to state 96
+    EQ       shift, and go to state 97
+    EQEQ     shift, and go to state 98
+    NE       shift, and go to state 99
+    OROR     shift, and go to state 100
+    ANDAND   shift, and go to state 101
+    LE       shift, and go to state 102
+    GE       shift, and go to state 103
+    PLUSEQ   shift, and go to state 104
+    MINUSEQ  shift, and go to state 105
+    PLUS     shift, and go to state 106
+    MINUS    shift, and go to state 107
+    STAR     shift, and go to state 108
+    SLASH    shift, and go to state 109
+
+    $default  reduce using rule 62 (opValueDecl)
+
+
+State 155
+
+   58 letExpn: LET optMut identifier opTypeDecl opValueDecl SEMICOLON .
+
+    $default  reduce using rule 58 (letExpn)
